@@ -3,9 +3,75 @@ name = "telebot"
 version = "0.1.0"
 description = "Add later"
 requires-python = ">=3.13"
+authors = [
+    { name = "Levchenko Vladislav V.", email = "levchenko19_97@mail.ru" }
+]
 dependencies = []
 
 [dependency-groups]
 dev = [
     "pre-commit>=4.2.0",
 ]
+
+[tool.mypy]
+strict = true
+local_partial_types = true
+warn_unreachable = true
+allow_redefinition = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+no_implicit_reexport = true
+disallow_untyped_defs = true
+plugins = ['pydantic.mypy']
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.ruff]
+lint.select = [
+    "UP", # pyupgrade
+    "C4", # comprehensions
+    "SIM", # flake8-simplify
+    "TCH",
+    "DTZ", # flake8-datetimez
+    "PTH", # use pathlib
+    "RUF",
+    "PL",
+    "TRY",
+    "N", # pep8-naming
+    "R",
+    "B", # flake8-bugbear
+    "S", # flake8-bandit
+    "ANN", # flake8-annotation
+    "E", "W", # pycodestyle
+    "F", # pyflakes
+    "D" # pydocstyle
+]
+lint.ignore = [
+    "PTH123",
+    "RUF003", "RUF001", "RUF002", "RUF023",
+    "B012",
+    "S101",
+    "ANN401",
+    "E402", "E501",
+    "TRY003",
+    "D100", "D104", "D105", "D107", "D400", "D415", "D212", "D213", "D205", "D202", "D200", "D204"
+]
+exclude = [
+    "migrations",
+    "__pycache__",
+    "manage.py",
+    "env",
+    ".env",
+    "venv",
+    ".venv"
+]
+show-fixes = true
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint.pep8-naming]
+classmethod-decorators = ["field_validator"]
