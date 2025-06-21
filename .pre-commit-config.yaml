@@ -35,12 +35,9 @@ repos:
         pass_filenames: false
         always_run: true
 
-
-  - repo: local
-    hooks:
       - id: print_actual_packages
         name: print_actual_packages
-        entry: 'uv tree --outdated --depth=1 --color=always'
+        entry: uv tree --outdated --depth=1 --color=always
         language: system
         pass_filenames: false
         verbose: true
