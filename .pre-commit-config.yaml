@@ -13,23 +13,37 @@ repos:
     hooks:
       - id: ruff-check
         types_or: [python, pyi]
+      - id: ruff-format
 
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.16.1
     hooks:
       - id: mypy
-        files: '(app)/.*\.py$'
+        files: '(bot)/.*\.py$'
         args: [--config-file=./pyproject.toml]
         additional_dependencies:
           - pydantic-settings
+          - pytelegrambotapi
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-yaml
+      - id: check-toml
+      - id: check-case-conflict
+      - id: check-added-large-files
+        exclude: ^(.*\/dummy.*|.*\.json)$
+        args: [ "--maxkb=750", "--enforce-all" ]
+      - id: detect-private-key
+      - id: check-merge-conflict
 
 
   - repo: local
     hooks:
       - id: pytest
         name: run pytest
-        entry: pytest --doctest-modules --tb=short --disable-pytest-warnings
+        entry: pytest --doctest-modules --tb=short
         language: system
         types: [python]
         pass_filenames: false
