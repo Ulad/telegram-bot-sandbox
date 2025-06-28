@@ -9,7 +9,7 @@ wheels/
 *.egg-info
 
 # Environments
-.env
+.env*
 .venv
 env/
 venv/

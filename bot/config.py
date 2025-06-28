@@ -10,7 +10,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr
 
 from pprint import pformat
-from pathlib import Path
+from os import getenv
 
 from bot.utils.logger import log
 
@@ -18,13 +18,35 @@ from bot.utils.logger import log
 class Settings(BaseSettings):
     """Class for main settings"""
 
-    model_config = SettingsConfigDict(env_file=Path(__file__).parent.parent / ".env", frozen=True)
-
     TOKEN: SecretStr
 
 
+class DevSettings(Settings):
+    """Class for development settings"""
+
+    model_config = SettingsConfigDict(env_file=".env.dev", env_file_encoding="utf-8")
+    ENV: str = "dev"
+
+
+class ProdSettings(Settings):
+    """Class for production settings"""
+
+    model_config = SettingsConfigDict(env_file=".env.prod", env_file_encoding="utf-8")
+    ENV: str = "prod"
+
+
 def get_cfg() -> Settings:
-    """Initialize settings lazily"""
-    cfg = Settings()
-    log.info(f"Project setting: {pformat(cfg.model_dump())}")
-    return cfg
+    """Return the settings object based on the environment."""
+
+    env = getenv("ENV", "dev")
+
+    if env.lower() in ("dev", "development"):
+        return DevSettings()
+    if env.lower() in ("prod", "production"):
+        return ProdSettings()
+
+    raise ValueError("Invalid environment. Must be 'dev' or 'prod'.")
+
+
+cfg = get_cfg()
+log.info(f"Project setting: {pformat(cfg.model_dump())}")
